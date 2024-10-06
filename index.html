@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Temperature Converter</h1>
+    
+    <input type="number" id="temperatureInput" placeholder="Enter temperature" required>
+    
+    <select id="scaleInput">
+        <option value="Celsius">Celsius</option>
+        <option value="Fahrenheit">Fahrenheit</option>
+        <option value="Kelvin">Kelvin</option>
+    </select>
+    
+    <button id="convertButton">Convert</button>
+    
+    <div class="result" id="resultDisplay"></div>
+
+    <script>
+        document.getElementById('convertButton').addEventListener('click', function() {
+            const tempInput = document.getElementById('temperatureInput').value;
+            const scaleInput = document.getElementById('scaleInput').value;
+            const resultDisplay = document.getElementById('resultDisplay');
+
+            // Validate input
+            const temperature = parseFloat(tempInput);
+            if (isNaN(temperature)) {
+                resultDisplay.innerText = 'Please enter a valid number.';
+                return;
+            }
+
+            let convertedTemp;
+            let convertedScale;
+
+            // Perform conversion based on selected scale
+            switch (scaleInput) {
+                case 'Celsius':
+                    convertedTemp = (temperature * 9/5) + 32; // Celsius to Fahrenheit
+                    convertedScale = 'Fahrenheit';
+                    break;
+                case 'Fahrenheit':
+                    convertedTemp = (temperature - 32) * 5/9; // Fahrenheit to Celsius
+                    convertedScale = 'Celsius';
+                    break;
+                case 'Kelvin':
+                    if (temperature < 0) {
+                        resultDisplay.innerText = 'Temperature in Kelvin cannot be negative.';
+                        return;
+                    }
+                    convertedTemp = temperature - 273.15; // Kelvin to Celsius
+                    convertedScale = 'Celsius';
+                    break;
+                default:
+                    resultDisplay.innerText = 'Invalid scale selected.';
+                    return;
+            }
+
+            // Convert to Kelvin if necessary
+            if (convertedScale === 'Celsius') {
+                resultDisplay.innerText = `${temperature} °C is ${convertedTemp.toFixed(2)} °F`;
+                resultDisplay.innerText += `\n${temperature} °C is ${(temperature + 273.15).toFixed(2)} K`;
+            } else if (convertedScale === 'Fahrenheit') {
+                resultDisplay.innerText = `${temperature} °F is ${convertedTemp.toFixed(2)} °C`;
+                resultDisplay.innerText += `\n${temperature} °F is ${((temperature - 32) * 5/9 + 273.15).toFixed(2)} K`;
+            }
+        });
+    </script>
+</body>
+</html>
